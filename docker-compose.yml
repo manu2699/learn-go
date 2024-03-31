@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  go-green-app:
+    container_name: go-green-app
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      POSTGRES_DB_URL: "host=go-green-pg-db user=admin password=imgroot dbname=go_green_master sslmode=disable"
+      PORT: 8080
+    depends_on:
+      - go-green-pg-db
+
+  go-green-pg-db:
+    container_name: go-green-pg-db
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: imgroot
+      POSTGRES_DB: go_green_master
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgressdata:/var/lib/postgresql/data
+
+volumes:
+  postgressdata: {}
